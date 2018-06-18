@@ -16,6 +16,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-sftp-deploy": "^0.2.5",
     "grunt-tinypng": "^0.7.0"
   }
 }

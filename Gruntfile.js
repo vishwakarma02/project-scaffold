@@ -1,5 +1,8 @@
+
 module.exports = function (grunt) {
+    
     grunt.initConfig({
+        serverCredentials: grunt.file.readJSON('serverCredential.json'),
 
         //watch for any change in .scss files in scss folder,
         //and if change detected then perform sass task to compile scss into css
@@ -54,9 +57,6 @@ module.exports = function (grunt) {
         },
         //minifying css all css files
         cssmin:{
-            // options:{
-            //     report: 'gzip' //trying to compress css into gzip format
-            // },
             my_target:{
                 files:[{
                     expand: true,
@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                     cwd: 'app/js',
                     src: '*js',
                     dest: 'build/js',
-                    ext: '.min.js',
+                    // ext: '.min.js',
                     flatten: 'false'
                 }]
             }
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 apiKey: "yA2fsBv5SvSzUnkWcVmOj1oMYEOJltKu",
                 checkSigs: "true",
                 sigFile: "app/file_sigs.json",
-                sigFileSpace: 2,
+                sigFileSpace: 1,
                 summarize: true,
                 summarizeOnError: true,
                 showProgress: true,
@@ -97,6 +97,27 @@ module.exports = function (grunt) {
                 src: ['*.png'], 
                 dest: 'build/images',
                 // ext: '.min.png'
+            }
+        },
+        // deploy on the server
+        'sftp-deploy': {
+            build: {
+              auth: {
+                host: 'your server name',
+                port: 22,
+                authKey: {
+                    "username": "your username",
+                    "password": "your password"
+                },
+              },
+              cache: false,
+              src: 'build',
+              dest: 'destination folder name',
+            //   exclusions: ['/path/to/source/folder/**/.DS_Store', '/path/to/source/folder/**/Thumbs.db', 'dist/tmp'],
+              serverSep: '/',
+              localSep: '/',
+              concurrency: 4,
+              progress: true
             }
         }
     });
@@ -109,10 +130,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tinypng');
+    grunt.loadNpmTasks('grunt-sftp-deploy');
 
     // define default task
     grunt.registerTask('default', ['browserSync', 'watch']);
-
     // custom task to create prod-build
     grunt.registerTask('build', ['htmlmin' ,'cssmin', 'uglify', 'tinypng']);
+
+    // custom task to deploy project on server
+    grunt.registerTask('deploy', ['sftp-deploy']);
 };

@@ -6,3 +6,6 @@ run 'grunt' in cmd, it will keep watch on all changes in 'app' folder, as well a
 
 for production build:
 run 'grunt build' to create a build folder which contains minified css, js, html and pngs.
+
+for generating icons:
+run 'grunt givemeicons' to create an 'output' folder in 'app/icons' which you can use to get icons.

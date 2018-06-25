@@ -7,10 +7,11 @@ module.exports = function (grunt) {
         //watch for any change in .scss files in scss folder,
         //and if change detected then perform sass task to compile scss into css
         watch: {
-            files: 'app/scss/*.scss',
-            tasks: ['sass']
+            scss:{
+                files: 'app/scss/*.scss',
+                tasks: ['sass']
+            }
         },
-
         //compiling scss into css
         sass: {
             dev: {
@@ -119,6 +120,18 @@ module.exports = function (grunt) {
               concurrency: 4,
               progress: true
             }
+        },
+        grunticon: {
+            myIcons: {
+                files: [{
+                    expand: true,
+                    cwd: 'app/icons/source',
+                    src: ['*.svg', '*.png'],
+                    dest: "app/icons/output"
+                }],
+                options: {
+                }
+            }
         }
     });
 
@@ -131,6 +144,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tinypng');
     grunt.loadNpmTasks('grunt-sftp-deploy');
+    grunt.loadNpmTasks('grunt-grunticon');
 
     // define default task
     grunt.registerTask('default', ['browserSync', 'watch']);
@@ -139,4 +153,7 @@ module.exports = function (grunt) {
 
     // custom task to deploy project on server
     grunt.registerTask('deploy', ['sftp-deploy']);
+
+    //create icons by uploading files
+    grunt.registerTask('givemeicons', ['grunticon:myIcons']); 
 };
